@@ -3,6 +3,7 @@ import os
 import numpy as np
 from PIL import Image
 import csv
+import random
 
 
 K = 58
@@ -35,6 +36,7 @@ def clean_data(datapath):
     for k in range(K):
         if classFreq[k] < 50:
             continue
+        random.shuffle(data[k])
         for i, img in enumerate(data[k]):
             img = Image.fromarray(img)
             if i < len(data[k]) * test_ratio:
