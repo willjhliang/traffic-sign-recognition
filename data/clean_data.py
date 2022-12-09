@@ -13,7 +13,7 @@ def clean_data(datapath):
     """Loads images from files and performs basic pre-processing."""
     classFreq = []
     data = {}
-    with open('data/labels.csv') as f:
+    with open('labels.csv') as f:
         reader = csv.DictReader(f)
         labels = list(reader)
     new_labels = []
@@ -21,9 +21,9 @@ def clean_data(datapath):
         data[k] = []
         classFreq.append(0)
 
-    os.mkdir('data/filtered_images')
-    os.mkdir('data/filtered_images/train')
-    os.mkdir('data/filtered_images/test')
+    os.mkdir('filtered_images')
+    os.mkdir('filtered_images/train')
+    os.mkdir('filtered_images/test')
 
     for f in os.listdir(datapath):
         k = int(f[:3])  # Get label from filename
@@ -40,13 +40,13 @@ def clean_data(datapath):
         for i, img in enumerate(data[k]):
             img = Image.fromarray(img)
             if i < len(data[k]) * test_ratio:
-                img.save(f"data/filtered_images/test/{kp:03}_{i:03}.png")
+                img.save(f"filtered_images/test/{kp:03}_{i:03}.png")
             else:
-                img.save(f"data/filtered_images/train/{kp:03}_{i:03}.png")
+                img.save(f"filtered_images/train/{kp:03}_{i:03}.png")
         kp += 1
         new_labels.append(labels[k])
 
-    with open('data/filtered_labels.csv', 'w') as f2:
+    with open('filtered_labels.csv', 'w') as f2:
         writer = csv.writer(f2)
         writer.writerow(['ClassId', 'Name'])
         for i in range(len(new_labels)):
@@ -55,4 +55,4 @@ def clean_data(datapath):
 
     return
 
-clean_data('data/images')
+clean_data('images')
