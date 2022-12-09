@@ -11,6 +11,7 @@ from data import split_validation
 
 
 def load_torch_data(X_train, y_train, X_test, y_test):
+    """Converts numpy data to torch dataloaders."""
     X_train, X_val, y_train, y_val = split_validation(X_train, y_train)
     train_set = data.TensorDataset(Tensor(X_train), Tensor(y_train))
     val_set = data.TensorDataset(Tensor(X_val), Tensor(y_val))
@@ -22,6 +23,7 @@ def load_torch_data(X_train, y_train, X_test, y_test):
     
 
 def train_model(model, train_loader, val_loader, epochs, lr):
+    """Trains model and plots loss and accuracies."""
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr) 
 
@@ -53,6 +55,7 @@ def train_model(model, train_loader, val_loader, epochs, lr):
 
 
 def evaluate_model(model, dataloader):
+    """Evaluates model and returns predictions and accuracy."""
     correct = 0
     total = 0
     y_pred = []

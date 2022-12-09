@@ -40,6 +40,7 @@ def shift_brightness(img, shift):
     img = np.clip(img + shift, 0, 1)
     return img
 
+
 def augment_img(img):
     """Augments image with rotation, cropping, and brightness shifts."""
     rot_angle = random.randint(-20, 20)
@@ -54,7 +55,9 @@ def augment_img(img):
 
     return img
 
+
 def augment_dataset(train_data):
+    """Applies augmentation to all classes in dataset."""
     max_k_size = max([len(train_data[k]) for k in range(len(train_data))])
     for k in range(len(train_data)):
         k_size = len(train_data[k])
@@ -62,9 +65,11 @@ def augment_dataset(train_data):
             train_data[k].append(augment_img(train_data[k][i % k_size]))
     return train_data
 
+
 def visualize_augmentation(train_data):
+    """Visualizes the augmentation applied onto the last image in each class."""
     fig, axs = plt.subplots(4, 10, figsize=(15, 5))
-    for k, (i, j) in itertools.zip_longest(range(K), list(itertools.product(range(4), range(10))), fillvalue=-1):
+    for k, (i, j) in itertools.zip_longest(range(len(train_data)), list(itertools.product(range(4), range(10))), fillvalue=-1):
         axs[i,j].axis('off')
         if k >= 0:
             img = augment_img(train_data[k][-1])

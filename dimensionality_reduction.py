@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 
 
 def run_pca(X_train_flattened, X_test_flattened):
+    """Runs PCA on training and test data, visualizing the variance explained by each component."""
     covar_matrix = PCA(n_components=min(X_train_flattened.shape[0], 32*32))
     covar_matrix.fit(X_train_flattened)
     var=np.cumsum(np.round(covar_matrix.explained_variance_ratio_, decimals=3)*100)
@@ -16,7 +17,9 @@ def run_pca(X_train_flattened, X_test_flattened):
     X_test_pca = pca.transform(X_test_flattened)
     return X_train_pca, X_test_pca, pca
 
+
 def visualize_pca(pca):
+    """Visualizes first 24 principal components."""
     fig, axes = plt.subplots(3, 8, figsize=(9, 3.5),
         subplot_kw={'xticks':[], 'yticks':[]},
         gridspec_kw=dict(hspace=0.1, wspace=0.1)
@@ -30,7 +33,9 @@ def visualize_pca(pca):
         ax.imshow(img)
     plt.show()
 
+
 def visualize_pca_per_channel(X_train):
+    """Visualizes first 24 principal components for each channel."""
     def pca_on_channel(channel):
         X_train_channel = np.array([i.flatten() for i in X_train[:, channel, :, :]])
         ret = PCA(n_components=150)

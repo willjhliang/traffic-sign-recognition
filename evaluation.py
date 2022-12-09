@@ -8,6 +8,7 @@ import pandas as pd
 
 
 def generate_confusion_matrix(y_actual, y_pred, labels):
+    """Generates a confusion matrix for the given labels and predictions."""
     mat = confusion_matrix(y_actual, y_pred)
     plt.figure(figsize = (30, 30))
     sns.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False, xticklabels = labels['Name'], yticklabels = labels['Name'])
@@ -16,6 +17,7 @@ def generate_confusion_matrix(y_actual, y_pred, labels):
  
  
 def get_classification_report(y_actual, y_pred, labels, print_df=False):
+    """Reports evaluation metrics for the given labels and predictions."""
     # Get classification report from sklearn package as python dict
     report = classification_report(y_actual, y_pred, target_names = labels['Name'], output_dict = True)
     
@@ -33,6 +35,7 @@ def get_classification_report(y_actual, y_pred, labels, print_df=False):
 
 
 def generate_class_comparison(report, metric, labels):
+    """Compares metrics for each class."""
     classes = list(labels['Name'])
     values = [report[cls][metric] for cls in classes]
     plt.xticks([], [])

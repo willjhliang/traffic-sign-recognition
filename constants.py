@@ -13,8 +13,3 @@ random_seed = 19104     # Seed all random operations to ensure reproducibility
 random.seed(random_seed)
 np.random.seed(random_seed)
 torch.manual_seed(random_seed)
-
-visualize_images = True
-visualize_augmentation = True
-visualize_pca = True
-visualize_pca_per_channel = False
