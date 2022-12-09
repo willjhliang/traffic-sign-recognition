@@ -18,7 +18,7 @@ def generate_confusion_matrix(y_actual, y_pred, labels):
  
 def get_classification_report(y_actual, y_pred, labels, print_df=False):
     """Reports evaluation metrics for the given labels and predictions."""
-    report = classification_report(y_actual, y_pred, target_names = labels['Name'], output_dict = True)
+    report = classification_report(y_actual, y_pred, target_names = labels['Name'], output_dict = True, zero_division=0)
     mat = confusion_matrix(y_actual, y_pred)
     class_accuracies = mat.diagonal()/(mat.sum(axis = 1))
     for index, class_name in enumerate(labels['Name']):
