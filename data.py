@@ -55,7 +55,7 @@ def split_validation(X_train, y_train):
 
 def visualize_data(train_data):
     """Visualizes the first image in each class."""
-    _, axs = plt.subplots(4, 10, figsize=(15, 5))
+    _, axs = plt.subplots(4, 10, figsize=(10, 3))
     for k, (i, j) in itertools.zip_longest(range(K), list(itertools.product(range(4), range(10))), fillvalue=-1):
         axs[i,j].axis('off')
         if k >= 0:
@@ -67,6 +67,6 @@ def compare_class_dist(data_1, data_2):
     class_dist_1 = [len(data_1[k]) for k in range(K)]
     class_dist_2 = [len(data_2[k]) for k in range(K)]
 
-    _, axs = plt.subplots(1, 2, figsize=(12, 4))
+    _, axs = plt.subplots(1, 2, figsize=(8, 2.5))
     axs[0].bar(list(range(K)), class_dist_1)
     axs[1].bar(list(range(K)), class_dist_2);

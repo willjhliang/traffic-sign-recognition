@@ -56,17 +56,12 @@ def train_model(model, train_loader, val_loader, epochs, lr):
 
 def evaluate_model(model, dataloader):
     """Evaluates model and returns predictions and accuracy."""
-    correct = 0
-    total = 0
     y_pred = []
     y_pred = torch.Tensor()
     with torch.no_grad():
-        for itr, (image, label) in enumerate(dataloader):
+        for _, (image, _) in enumerate(dataloader):
             outputs = model(image)
             _, predicted = torch.max(outputs.data, 1)
             y_pred = torch.cat((y_pred, predicted))
-            correct += predicted.eq(label.reshape(len(label),)).sum() 
-            total += float(len(label))
-        accuracy = correct / total
 
-    return y_pred.tolist(), accuracy
+    return y_pred.tolist()

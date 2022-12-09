@@ -26,7 +26,13 @@ def get_classification_report(y_actual, y_pred, labels, print_df=False):
 
     df = pd.DataFrame.from_dict(report).T
     if print_df:
-        print(tabulate(df, headers = ['Label', 'Precision', 'Recall', 'F1 Score', 'Support', 'Accuracy'], tablefmt = 'fancy_grid'))
+        print(tabulate(df, headers = ['Label', 'Precision', 'Recall', 'F1 Score', 'Support', 'Accuracy'], tablefmt = 'simple_grid'))
+
+    metrics = ['macro avg', 'weighted avg']
+    headers = list(report[metrics[0]].keys())
+    table = [[metric] + list(report[metric].values()) for metric in metrics]
+    print(f'accuracy: {report["accuracy"]}')
+    print(tabulate(table, headers=headers, tablefmt='simple_grid'))
 
     return report, df
 
