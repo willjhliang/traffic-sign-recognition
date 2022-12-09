@@ -69,19 +69,21 @@ def train_model(model, train_loader, val_loader, epochs, lr):
 
 
 def evaluate_model(model, dataloader):
-    """Evaluates model and returns predictions and metrics."""
+    """Evaluates model and returns predictions, truth labels, and metrics."""
     accuracy, precision, recall, f1 = 0, 0, 0, 0
 
-    pred = torch.Tensor([])
+    preds = torch.Tensor([])
+    labels = torch.Tensor([])
     with torch.no_grad():
-        for _, (images, labels) in enumerate(dataloader):
+        for _, (images, batch_labels) in enumerate(dataloader):
             outputs = model(images)
-            _, batch_pred = torch.max(outputs.data, 1)
-            pred = torch.cat((pred, batch_pred))
+            _, batch_preds = torch.max(outputs.data, 1)
+            preds = torch.cat((preds, batch_preds))
+            labels = torch.cat((labels, batch_labels))
             batch_weight = images.size(0) / len(dataloader.dataset)
-            accuracy += batch_weight * accuracy_score(labels, batch_pred)
-            precision += batch_weight * precision_score(labels, batch_pred, average='macro', zero_division=0)
-            recall += batch_weight * recall_score(labels, batch_pred, average='macro', zero_division=0)
-            f1 += batch_weight * f1_score(labels, batch_pred, average='macro', zero_division=0)
+            accuracy += batch_weight * accuracy_score(batch_labels, batch_preds)
+            precision += batch_weight * precision_score(batch_labels, batch_preds, average='macro', zero_division=0)
+            recall += batch_weight * recall_score(batch_labels, batch_preds, average='macro', zero_division=0)
+            f1 += batch_weight * f1_score(batch_labels, batch_preds, average='macro', zero_division=0)
 
-    return pred.tolist(), (accuracy, precision, recall, f1)
+    return (preds.tolist(), labels.tolist()), (accuracy, precision, recall, f1)
