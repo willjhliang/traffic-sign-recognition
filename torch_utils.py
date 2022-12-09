@@ -1,5 +1,4 @@
 
-from tqdm import tqdm
 from matplotlib import pyplot as plt
 
 import torch
@@ -7,9 +6,8 @@ from torch import nn
 from torch import optim
 from torch.utils import data
 from torch import Tensor
-from torchmetrics import Accuracy, Precision, Recall, F1Score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-from constants import K
 from data import split_validation
 
 
@@ -37,7 +35,7 @@ def train_model(model, train_loader, val_loader, epochs, lr):
     train_f1, val_f1 = [], []
     for epoch in range(epochs):
         running_loss = 0
-        for itr, (image, label) in tqdm(enumerate(train_loader), total=len(train_loader), leave=False):
+        for itr, (image, label) in enumerate(train_loader):
             optimizer.zero_grad()
             y_predicted = model(image)
             label = label.long()
@@ -72,10 +70,7 @@ def train_model(model, train_loader, val_loader, epochs, lr):
 
 def evaluate_model(model, dataloader):
     """Evaluates model and returns predictions and metrics."""
-    accuracy = Accuracy(task='multiclass', num_classes=K)
-    precision = Precision(task='multiclass', num_classes=K)
-    recall = Recall(task='multiclass', num_classes=K)
-    f1 = F1Score(task='multiclass', num_classes=K)
+    accuracy, precision, recall, f1 = 0, 0, 0, 0
 
     pred = torch.Tensor([])
     with torch.no_grad():
@@ -83,9 +78,10 @@ def evaluate_model(model, dataloader):
             outputs = model(images)
             _, batch_pred = torch.max(outputs.data, 1)
             pred = torch.cat((pred, batch_pred))
-            accuracy(batch_pred, labels)
-            precision(batch_pred, labels)
-            recall(batch_pred, labels)
-            f1(batch_pred, labels)
+            batch_weight = images.size(0) / len(dataloader.dataset)
+            accuracy += batch_weight * accuracy_score(labels, batch_pred)
+            precision += batch_weight * precision_score(labels, batch_pred, average='macro', zero_division=0)
+            recall += batch_weight * recall_score(labels, batch_pred, average='macro', zero_division=0)
+            f1 += batch_weight * f1_score(labels, batch_pred, average='macro', zero_division=0)
 
-    return pred.tolist(), (accuracy.compute(), precision.compute(), recall.compute(), f1.compute())
+    return pred.tolist(), (accuracy, precision, recall, f1)
