@@ -62,3 +62,20 @@ def visualize_pca_per_channel(X_train):
     )
     for i, ax in enumerate(axes.flat):
         ax.imshow(pca_on_channel(2).components_[i].reshape(32, 32))
+
+
+def visualize_image_components(pca, image):
+   fig, axes = plt.subplots(1, 8, figsize=(9, 3),
+       subplot_kw={'xticks':[], 'yticks':[]},
+       gridspec_kw=dict(hspace=0.1, wspace=0.1)
+   )
+  
+   ns = [0, 1, 2, 10, 30, 50, 100, 150]
+   for i, ax in enumerate(axes.flat):
+       if i >= len(ns): break
+       img = pca.components_[:ns[i] + 1] @ image @ pca.components_[:ns[i] + 1]
+       min_val, max_val = np.min(img), np.max(img)
+       img = (img - min_val) / (max_val - min_val)
+       img = img.reshape(3, 32, 32)
+       img = np.swapaxes(img, 0, -1)
+       ax.imshow(img)
