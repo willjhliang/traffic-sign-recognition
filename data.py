@@ -16,11 +16,12 @@ def load_data(datapath):
 
     for f in os.listdir(datapath):
         k = int(f[:3])  # Get label from filename
-        img = Image.open(os.path.join(datapath, f))
+        img = Image.open(os.path.join(datapath, f)).convert('RGB')
         img = np.asarray(img) / 255  # Set pixel values to [0, 1]
         if len(data[k]) < class_size:
             data[k].append(img)
-    random.shuffle(data[k])
+    for k in range(K):
+        random.shuffle(data[k])
     
     return data
 
@@ -57,7 +58,7 @@ def visualize_data(train_data):
     """Visualizes the first image in each class."""
     _, axs = plt.subplots(4, 10, figsize=(10, 3))
     for k, (i, j) in itertools.zip_longest(range(K), list(itertools.product(range(4), range(10))), fillvalue=-1):
-        axs[i,j].axis('off')
+        axs[i, j].axis('off')
         if k >= 0:
             axs[i,j].imshow(train_data[k][0])
 
