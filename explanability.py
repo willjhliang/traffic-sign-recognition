@@ -5,10 +5,10 @@ from heapq import heappush, heappop
 from PIL import Image
 import torch
 from sklearn.manifold import TSNE
-from lime import lime_image
-from skimage.segmentation import mark_boundaries
-import torch.nn.functional as F
-from functools import partial
+# from lime import lime_image
+# from skimage.segmentation import mark_boundaries
+# import torch.nn.functional as F
+# from functools import partial
 
 from data import load_data, consolidate_data
 
@@ -108,17 +108,17 @@ def adversarial_attack(model, labels):
         axs[i].title.set_text(labels['Name'][pred])
 
 
-def visualize_lime(model, X_test):
-    """Runs lime on test data to visualize important pixels."""
-    def cnnpredictlime(model, image):
-        image = np.swapaxes(image, 1, 3)
-        preds = model(torch.from_numpy(image).to(torch.float32))
-        probs = F.softmax(preds, dim = 1)
-        return probs.detach().cpu().numpy()
+# def visualize_lime(model, X_test):
+#     """Runs lime on test data to visualize important pixels."""
+#     def cnnpredictlime(model, image):
+#         image = np.swapaxes(image, 1, 3)
+#         preds = model(torch.from_numpy(image).to(torch.float32))
+#         probs = F.softmax(preds, dim = 1)
+#         return probs.detach().cpu().numpy()
     
-    limepredhelper = partial(cnnpredictlime, model)
-    explainr = lime_image.LimeImageExplainer()
-    img = np.swapaxes(X_test[415], 0, 2)
-    explanation1 = explainr.explain_instance(img, limepredhelper, hide_color = 1, num_samples = 200, random_seed = 19104, num_features = 100)
-    image1, mask1 = explanation1.get_image_and_mask(explanation1.top_labels[0], positive_only = False, negative_only = False, num_features = 50, hide_rest = True) # Change positive_only to True to get rid of red and green
-    plt.imshow(mark_boundaries(image1, mask1)) # red means positive influence pixels, negative means not so helpful pixels
+#     limepredhelper = partial(cnnpredictlime, model)
+#     explainr = lime_image.LimeImageExplainer()
+#     img = np.swapaxes(X_test[415], 0, 2)
+#     explanation1 = explainr.explain_instance(img, limepredhelper, hide_color = 1, num_samples = 200, random_seed = 19104, num_features = 100)
+#     image1, mask1 = explanation1.get_image_and_mask(explanation1.top_labels[0], positive_only = False, negative_only = False, num_features = 50, hide_rest = True) # Change positive_only to True to get rid of red and green
+#     plt.imshow(mark_boundaries(image1, mask1)) # red means positive influence pixels, negative means not so helpful pixels
