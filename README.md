@@ -2,7 +2,7 @@
 
 Identifying traffic signs (examples pictured in Figure 1) is a crucial milestone in self-driving technologies. Our work solves this problem with multiple machine learning algorithms; given the unbalanced nature of our data, we compare the macro and weighted F1 scores of classical methods against modern deep learning architectures. We find that in our filtered dataset, a convolutional neural network (activations visualized in Figure 2) achieves a macro F1 score of 0.99, with simpler methods also achieving scores of over 0.90. We also investigate our methods on a smaller training dataset, in which transfer learning outperforms other strategies by a huge margin.
 
-Our full paper is included in the repository as `paper.pdf`.
+Our full paper is included in the repository as `paper.pdf`. A walkthrough of our data exploration and CNN model is in `walkthrough.ipynb`.
 
 <img src="https://user-images.githubusercontent.com/34076345/206936373-869c144d-b28d-480f-b284-95dfd3d308e8.png" width="500">
 
